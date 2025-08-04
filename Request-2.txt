@@ -1,4 +1,4 @@
-  What is the percentage of unique product increase in 2021 vs. 2020?
+2.  What is the percentage of unique product increase in 2021 vs. 2020?
 
 WITH product_counts AS (
     SELECT 
@@ -16,4 +16,5 @@ SELECT
         ((unique_products_2021 - unique_products_2020) * 100.0) / unique_products_2020,
         2
     ) AS percentage_chg
+
 FROM product_counts;
