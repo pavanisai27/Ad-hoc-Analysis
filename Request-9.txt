@@ -1,0 +1,19 @@
+9.  Which channel helped to bring more gross sales in the fiscal year 2021 
+and the percentage of contribution?  
+
+WITH channel_sales AS (
+    SELECT c.channel,
+        ROUND(SUM(g.gross_price * f.sold_quantity) / 1000000, 2) AS gross_sales_mln
+    FROM dim_customer c
+    JOIN fact_sales_monthly f ON c.customer_code = f.customer_code
+    JOIN fact_gross_price g ON g.product_code = f.product_code
+    WHERE f.fiscal_year = '2021'
+    GROUP BY c.channel),
+total_sales AS (
+    SELECT SUM(gross_sales_mln) AS total_gross_sales_mln
+    FROM channel_sales)
+SELECT cs.channel,cs.gross_sales_mln,
+    CONCAT(ROUND(cs.gross_sales_mln * 100 / ts.total_gross_sales_mln, 2), ' %') AS percentage
+FROM  channel_sales cs
+JOIN  total_sales ts
+ORDER BY cs.gross_sales_mln DESC;
